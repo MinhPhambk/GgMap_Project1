@@ -1,0 +1,48 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#map {
+    height: 100%;
+    width: 75%;
+    float: right;
+}
+
+#menu {
+    height: 100%;
+    width: 20%;
+    float: left;
+    overflow-y: auto;
+    background-color: #f1f1f1;
+    padding: 20px;
+}
+
+/* Style the menu items */
+.menu-item {
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    background-color: #ddd;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.menu-item:hover {
+    background-color: #bbb;
+}
+
+#search-input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+.coordinate-input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}

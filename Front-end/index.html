@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Routing</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css">
+<body>
+
+    <div id="map"></div>
+    <div id="menu">
+        <input type="text" id="search-input" placeholder="Search...">
+        <!-- Add more menu items as needed -->
+        <input type="text" id="start-input" class="coordinate-input" placeholder="Start Coordinate" onclick="startInputClick()">
+        <input type="text" id="destination-input" class="coordinate-input" placeholder="Destination Coordinate">
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>
