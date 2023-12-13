@@ -148,7 +148,7 @@ var map = L.map("map", {
   maxBoundsViscosity: 1.0,
   center: [21.041947, 105.8473907],
   zoom: 17,
-  minZoom: 17,
+  minZoom: 10,
 });
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
