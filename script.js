@@ -158,11 +158,16 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 // ------------------------------------------------------------------------ //
 // ---------------             Global variables           ----------------- //
 // ------------------------------------------------------------------------ //
+const MAX_INT = 100000;
+const DELAY = (ms) => new Promise((res) => setTimeout(res, ms));
+
 var NodeList = [];
 var EdgeList = [];
-var startPoint = new Node(-1, -1, -1);
-var endPoint = new Node(-1, -1, -1);
-const MAX_INT = 100000;
+var StartNode = new Node(-1, -1, -1);
+var EndNode = new Node(-1, -1, -1);
+var ModeVisualize = false;
+var StopLoop = false;
+var Algorithm = 0;
 
 // ------------------------------------------------------------------------ //
 // ---------------              Helper functions          ----------------- //
@@ -194,14 +199,27 @@ function showAllPointAndSegemnt(nodeList, edgeList) {
   }
 }
 
-function refreshPointAndSegemnt() {
-  startPoint = new Node(-1, -1, -1);
-  endPoint = new Node(-1, -1, -1);
+function refreshPoint() {
+  StartNode = new Node(-1, -1, -1);
+  EndNode = new Node(-1, -1, -1);
   map.eachLayer((layer) => {
-    if (layer instanceof L.Marker || layer instanceof L.Polyline) {
+    if (layer instanceof L.Marker) {
       layer.remove();
     }
   });
+}
+
+function refreshSegemnt() {
+  map.eachLayer((layer) => {
+    if (layer instanceof L.Polyline) {
+      layer.remove();
+    }
+  });
+}
+
+function refreshPointAndSegemnt() {
+  refreshPoint();
+  refreshSegemnt();
 }
 
 function dist(item1, item2) {
@@ -301,7 +319,14 @@ function getDataEdges(xmlDoc) {
 // ------------------------------------------------------------------------ //
 // ---------------          Dijkstra's algorithm          ----------------- //
 // ------------------------------------------------------------------------ //
-function getPath_Dijkstra(start, end, nodeList, edgeList) {
+async function drawPath_Dijkstra(
+  start,
+  end,
+  nodeList,
+  edgeList,
+  mode = false,
+  timeDelay = 20
+) {
   var prev = [];
   for (let i = 0; i < nodeList.length; i++) prev.push(-1);
 
@@ -314,7 +339,7 @@ function getPath_Dijkstra(start, end, nodeList, edgeList) {
   var pq = new PriorityQueue();
   pq.add([0, getIndexByNodeId(start.id)]);
 
-  while (!pq.isEmpty()) {
+  while (!pq.isEmpty() && !StopLoop) {
     let u = pq.remove()[1];
     distances[u].visited = true;
 
@@ -327,8 +352,18 @@ function getPath_Dijkstra(start, end, nodeList, edgeList) {
         distances[e.v].value = distances[u].value + e.w;
         pq.add([distances[e.v].value, e.v]);
         prev[e.v] = u;
+
+        if (mode == true) {
+          await DELAY(timeDelay);
+          drawSegment(nodeList[u], nodeList[e.v]);
+        }
       }
     }
+  }
+
+  if (mode == true) {
+    await DELAY(timeDelay * 100);
+    refreshSegemnt();
   }
 
   var path = [];
@@ -337,56 +372,292 @@ function getPath_Dijkstra(start, end, nodeList, edgeList) {
     path.push(nodeList[u]);
     u = prev[u];
   }
+  for (let i = 1; i < path.length; i++) {
+    drawSegment(path[i - 1], path[i]);
+  }
+}
 
-  return path;
+// ------------------------------------------------------------------------ //
+// ---------------             BFS's algorithm            ----------------- //
+// ------------------------------------------------------------------------ //
+async function drawPath_BFS(
+  start,
+  end,
+  nodeList,
+  edgeList,
+  mode = false,
+  timeDelay = 20
+) {
+  var prev = [];
+  for (let i = 0; i < nodeList.length; i++) prev.push(-1);
+
+  let distances = [];
+  for (let i = 0; i < nodeList.length; i++) {
+    distances.push(new Distance(MAX_INT, false));
+  }
+
+  distances[getIndexByNodeId(start.id)].value = 0;
+  var pq = new PriorityQueue();
+  pq.add([0, getIndexByNodeId(start.id)]);
+
+  while (!pq.isEmpty() && !StopLoop) {
+    let u = pq.remove()[1];
+    distances[u].visited = true;
+
+    for (let i = 0; i < edgeList[u].length; i++) {
+      var e = edgeList[u][i];
+      if (
+        !distances[e.v].visited &&
+        distances[u].value + e.w < distances[e.v].value
+      ) {
+        distances[e.v].value = distances[u].value + e.w;
+        pq.add([distances[e.v].value, e.v]);
+        prev[e.v] = u;
+
+        if (mode == true) {
+          await DELAY(timeDelay);
+          drawSegment(nodeList[u], nodeList[e.v]);
+        }
+      }
+    }
+  }
+
+  if (mode == true) {
+    await DELAY(timeDelay * 100);
+    refreshSegemnt();
+  }
+
+  var path = [];
+  var u = getIndexByNodeId(end.id);
+  while (u != -1) {
+    path.push(nodeList[u]);
+    u = prev[u];
+  }
+  for (let i = 1; i < path.length; i++) {
+    drawSegment(path[i - 1], path[i]);
+  }
+}
+
+// ------------------------------------------------------------------------ //
+// ---------------             DFS's algorithm            ----------------- //
+// ------------------------------------------------------------------------ //
+async function drawPath_DFS(
+  start,
+  end,
+  nodeList,
+  edgeList,
+  mode = false,
+  timeDelay = 20
+) {
+  var prev = [];
+  for (let i = 0; i < nodeList.length; i++) prev.push(-1);
+
+  let distances = [];
+  for (let i = 0; i < nodeList.length; i++) {
+    distances.push(new Distance(MAX_INT, false));
+  }
+
+  distances[getIndexByNodeId(start.id)].value = 0;
+  var pq = new PriorityQueue();
+  pq.add([0, getIndexByNodeId(start.id)]);
+
+  while (!pq.isEmpty() && !StopLoop) {
+    let u = pq.remove()[1];
+    distances[u].visited = true;
+
+    for (let i = 0; i < edgeList[u].length; i++) {
+      var e = edgeList[u][i];
+      if (
+        !distances[e.v].visited &&
+        distances[u].value + e.w < distances[e.v].value
+      ) {
+        distances[e.v].value = distances[u].value + e.w;
+        pq.add([distances[e.v].value, e.v]);
+        prev[e.v] = u;
+
+        if (mode == true) {
+          await DELAY(timeDelay);
+          drawSegment(nodeList[u], nodeList[e.v]);
+        }
+      }
+    }
+  }
+
+  if (mode == true) {
+    await DELAY(timeDelay * 100);
+    refreshSegemnt();
+  }
+
+  var path = [];
+  var u = getIndexByNodeId(end.id);
+  while (u != -1) {
+    path.push(nodeList[u]);
+    u = prev[u];
+  }
+  for (let i = 1; i < path.length; i++) {
+    drawSegment(path[i - 1], path[i]);
+  }
+}
+
+// ------------------------------------------------------------------------ //
+// ---------------          ASearch's algorithm          ----------------- //
+// ------------------------------------------------------------------------ //
+async function drawPath_ASearch(
+  start,
+  end,
+  nodeList,
+  edgeList,
+  mode = false,
+  timeDelay = 20
+) {
+  var prev = [];
+  for (let i = 0; i < nodeList.length; i++) prev.push(-1);
+
+  let distances = [];
+  for (let i = 0; i < nodeList.length; i++) {
+    distances.push(new Distance(MAX_INT, false));
+  }
+
+  distances[getIndexByNodeId(start.id)].value = 0;
+  var pq = new PriorityQueue();
+  pq.add([0, getIndexByNodeId(start.id)]);
+
+  while (!pq.isEmpty() && !StopLoop) {
+    let u = pq.remove()[1];
+    distances[u].visited = true;
+
+    for (let i = 0; i < edgeList[u].length; i++) {
+      var e = edgeList[u][i];
+      if (
+        !distances[e.v].visited &&
+        distances[u].value + e.w < distances[e.v].value
+      ) {
+        distances[e.v].value = distances[u].value + e.w;
+        pq.add([distances[e.v].value, e.v]);
+        prev[e.v] = u;
+
+        if (mode == true) {
+          await DELAY(timeDelay);
+          drawSegment(nodeList[u], nodeList[e.v]);
+        }
+      }
+    }
+  }
+
+  if (mode == true) {
+    await DELAY(timeDelay * 100);
+    refreshSegemnt();
+  }
+
+  var path = [];
+  var u = getIndexByNodeId(end.id);
+  while (u != -1) {
+    path.push(nodeList[u]);
+    u = prev[u];
+  }
+  for (let i = 1; i < path.length; i++) {
+    drawSegment(path[i - 1], path[i]);
+  }
+}
+
+// ------------------------------------------------------------------------ //
+// ---------------       Choose an algorithm to route     ----------------- //
+// ------------------------------------------------------------------------ //
+async function drawPath(option = 0) {
+  // option:
+  //   0: Dijkstra (Default)
+  //   1: BFS
+  //   2: DFS
+  //   3: A*
+  if (option == 0) {
+    await drawPath_Dijkstra(StartNode, EndNode, NodeList, EdgeList, ModeVisualize);
+  } else if (option == 1) {
+    await drawPath_BFS(StartNode, EndNode, NodeList, EdgeList, ModeVisualize);
+  } else if (option == 2) {
+    await drawPath_DFS(StartNode, EndNode, NodeList, EdgeList, ModeVisualize);
+  } else if (option == 3) {
+    await drawPath_ASearch(StartNode, EndNode, NodeList, EdgeList, ModeVisualize);
+  }
 }
 
 // ------------------------------------------------------------------------ //
 // ---------------              Event listener            ----------------- //
 // ------------------------------------------------------------------------ //
+// Add event select algorithm for button click
+document
+  .getElementById("listActionDiv")
+  .addEventListener("click", function (event) {
+    event.stopPropagation();
+  });
+
+// Add event select algorithm for button click
+document.querySelectorAll("#dropdownItem a").forEach(function (item) {
+  item.addEventListener("click", async function () {
+    if (item.textContent == "Dijkstra") Algorithm = 0;
+    else if (item.textContent == "Breadth First Search") Algorithm = 1;
+    else if (item.textContent == "Depth First Search") Algorithm = 2;
+    else if (item.textContent == "A* Search") Algorithm = 3;
+    document.getElementById("algo").innerHTML = item.textContent;
+    StopLoop = true;
+    await DELAY(100);
+    refreshPointAndSegemnt();
+  });
+});
+
+// Add event visualization mode for button click
+document
+  .getElementById("visualizationButton")
+  .addEventListener("click", function (event) {
+    event.stopPropagation();
+    ModeVisualize = !ModeVisualize;
+    if (ModeVisualize)
+      document.getElementById("visualizationButton").innerHTML =
+        "Visualization mode: <strong>ON</strong>";
+    else
+      document.getElementById("visualizationButton").innerHTML =
+        "Visualization mode: <strong>OFF</strong>";
+  });
+
 // Add event show all data for button click
 document
-.getElementById("showDataButton")
-.addEventListener("click", function (event) {
-  event.stopPropagation();
-  showAllPointAndSegemnt(NodeList, EdgeList);
-});
+  .getElementById("showDataButton")
+  .addEventListener("click", function (event) {
+    event.stopPropagation();
+    showAllPointAndSegemnt(NodeList, EdgeList);
+  });
 
 // Add event refresh points for button click
 document
   .getElementById("refreshButton")
-  .addEventListener("click", function (event) {
+  .addEventListener("click", async function (event) {
     event.stopPropagation();
+    StopLoop = true;
+    await DELAY(100);
     refreshPointAndSegemnt();
   });
 
 // Add event listener for map click
-map.on("click", function (e) {
-  if (startPoint.lat != -1 && endPoint.lat != -1) return;
-  if (startPoint.lat == -1) {
-    startPoint.lat = e.latlng.lat;
-    startPoint.lon = e.latlng.lng;
-    startPoint = getNearestNode(startPoint);
+map.on("click", async function (e) {
+  if (StartNode.lat != -1 && EndNode.lat != -1) return;
+  if (StartNode.lat == -1) {
+    StopLoop = false;
+    StartNode.lat = e.latlng.lat;
+    StartNode.lon = e.latlng.lng;
+    StartNode = getNearestNode(StartNode);
 
-    L.marker([startPoint.lat, startPoint.lon])
+    L.marker([StartNode.lat, StartNode.lon])
       .bindPopup("From")
       .openPopup()
       .addTo(map);
-  } else if (endPoint.lat == -1) {
-    endPoint.lat = e.latlng.lat;
-    endPoint.lon = e.latlng.lng;
-    endPoint = getNearestNode(endPoint);
+  } else if (EndNode.lat == -1) {
+    EndNode.lat = e.latlng.lat;
+    EndNode.lon = e.latlng.lng;
+    EndNode = getNearestNode(EndNode);
 
-    L.marker([endPoint.lat, endPoint.lon])
-      .bindPopup("To")
-      .openPopup()
-      .addTo(map);
+    L.marker([EndNode.lat, EndNode.lon]).bindPopup("To").openPopup().addTo(map);
 
     // Algorithm
-    const path_res = getPath_Dijkstra(startPoint, endPoint, NodeList, EdgeList);
-    for (let i = 1; i < path_res.length; i++) {
-      drawSegment(path_res[i - 1], path_res[i]);
-    }
+    drawPath(Algorithm);
   }
 });
 

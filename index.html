@@ -7,9 +7,10 @@
     <title>Map Routing</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
 
 <body>
-
     <div id="mainContainer">
         <div id="mapDiv">
             <div id="map">
@@ -19,12 +20,25 @@
                 <button id="refreshButton">
                     Refresh map
                 </button>
+                <button id="visualizationButton">
+                    Visualization mode: <strong>OFF</strong>
+                </button>
+                <div id="listActionDiv" class="dropdown">
+                    <button id="algo" class="dropbtn">Dijkstra</button>
+                    <img src="downIcon.svg" class="img"> 
+                    <div id="dropdownItem" class="dropdown-content">
+                        <a>Dijkstra</a>
+                        <a>Breadth First Search</a>
+                        <a>Depth First Search</a>
+                        <a>A* Search</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="scripts.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>
