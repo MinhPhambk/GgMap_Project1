@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="CGImap 0.8.10 (1610662 spike-08.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+<osm version="0.6" generator="CGImap 0.8.10 (1605639 spike-08.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
  <bounds minlat="21.0399500" minlon="105.8423700" maxlat="21.0450300" maxlon="105.8523500"/>
  <node id="75622401" visible="true" version="11" changeset="10969461" timestamp="2012-03-13T17:38:32Z" user="&lt;don&gt;" uid="45059" lat="21.0411908" lon="105.8531646"/>
  <node id="75622718" visible="true" version="17" changeset="141380163" timestamp="2023-09-17T12:41:49Z" user="ItsLouisAnderson" uid="11691953" lat="21.0460699" lon="105.8656539"/>
@@ -108,6 +108,7 @@
   <tag k="traffic_signals:vibration" v="no"/>
  </node>
  <node id="104769348" visible="true" version="8" changeset="128338300" timestamp="2022-11-01T10:40:35Z" user="ItsLouisAnderson" uid="11691953" lat="21.0326760" lon="105.8559084"/>
+ <node id="104824964" visible="true" version="21" changeset="145021765" timestamp="2023-12-12T04:31:31Z" user="phoenixsaigon1698" uid="3323343" lat="21.0363666" lon="105.8496651"/>
  <node id="104826387" visible="true" version="8" changeset="142131851" timestamp="2023-10-04T08:02:03Z" user="CactiStaccingCrane" uid="14538650" lat="21.0399079" lon="105.8459805"/>
  <node id="308714437" visible="true" version="3" changeset="15955683" timestamp="2013-05-03T06:19:38Z" user="QuangDBui@TMA" uid="1276367" lat="21.0450242" lon="105.8424840"/>
  <node id="308714438" visible="true" version="4" changeset="34543217" timestamp="2015-10-10T05:27:31Z" user="totim" uid="562188" lat="21.0455268" lon="105.8426003"/>
@@ -2268,11 +2269,10 @@
  <node id="6635110254" visible="true" version="1" changeset="72481765" timestamp="2019-07-21T12:33:34Z" user="hieuvan" uid="2678766" lat="21.0364943" lon="105.8487841"/>
  <node id="6635110255" visible="true" version="1" changeset="72481765" timestamp="2019-07-21T12:33:34Z" user="hieuvan" uid="2678766" lat="21.0362464" lon="105.8489022"/>
  <node id="6635110256" visible="true" version="1" changeset="72481765" timestamp="2019-07-21T12:33:34Z" user="hieuvan" uid="2678766" lat="21.0361500" lon="105.8491114"/>
- <node id="6635110257" visible="true" version="1" changeset="72481765" timestamp="2019-07-21T12:33:34Z" user="hieuvan" uid="2678766" lat="21.0363966" lon="105.8497913"/>
  <node id="6635110258" visible="true" version="1" changeset="72481765" timestamp="2019-07-21T12:33:34Z" user="hieuvan" uid="2678766" lat="21.0364492" lon="105.8499201"/>
  <node id="6635110259" visible="true" version="1" changeset="72481765" timestamp="2019-07-21T12:33:34Z" user="hieuvan" uid="2678766" lat="21.0364554" lon="105.8500220"/>
  <node id="6635110260" visible="true" version="1" changeset="72481765" timestamp="2019-07-21T12:33:34Z" user="hieuvan" uid="2678766" lat="21.0363315" lon="105.8504377"/>
- <node id="6635110261" visible="true" version="1" changeset="72481765" timestamp="2019-07-21T12:33:34Z" user="hieuvan" uid="2678766" lat="21.0363741" lon="105.8507851"/>
+ <node id="6635110261" visible="true" version="2" changeset="145021765" timestamp="2023-12-12T04:31:31Z" user="phoenixsaigon1698" uid="3323343" lat="21.0363481" lon="105.8508439"/>
  <node id="6635110262" visible="true" version="1" changeset="72481765" timestamp="2019-07-21T12:33:34Z" user="hieuvan" uid="2678766" lat="21.0364192" lon="105.8510251"/>
  <node id="6635110263" visible="true" version="1" changeset="72481765" timestamp="2019-07-21T12:33:34Z" user="hieuvan" uid="2678766" lat="21.0366395" lon="105.8518714"/>
  <node id="6635110264" visible="true" version="1" changeset="72481765" timestamp="2019-07-21T12:33:34Z" user="hieuvan" uid="2678766" lat="21.0367784" lon="105.8523542"/>
@@ -5883,7 +5883,7 @@
   <tag k="name" v="Nhà máy nước Yên Phụ"/>
   <tag k="name:en" v="Yen Phu Water Plant"/>
  </way>
- <way id="698018234" visible="true" version="3" changeset="118617625" timestamp="2022-03-18T04:49:17Z" user="Senior_Intern" uid="13899044">
+ <way id="698018234" visible="true" version="4" changeset="145023033" timestamp="2023-12-12T05:48:21Z" user="ItsLouisAnderson" uid="11691953">
   <nd ref="6555405171"/>
   <nd ref="6555405170"/>
   <nd ref="6555405169"/>
@@ -5907,11 +5907,10 @@
   <nd ref="6555405151"/>
   <nd ref="6555405150"/>
   <nd ref="6555405171"/>
-  <tag k="building" v="yes"/>
+  <tag k="building" v="apartments"/>
   <tag k="building:levels" v="21"/>
-  <tag k="name" v="Chung Cư Aqua Central Hà Nội"/>
+  <tag k="name" v="Aqua Central Hà Nội"/>
   <tag k="name:en" v="Hanoi Aqua Central"/>
-  <tag k="shop" v="mall"/>
  </way>
  <way id="698018238" visible="true" version="1" changeset="71366485" timestamp="2019-06-18T13:34:28Z" user="TuanIfan" uid="625303">
   <nd ref="6555407691"/>
@@ -7510,7 +7509,7 @@
   <tag k="oneway" v="yes"/>
   <tag k="surface" v="asphalt"/>
  </way>
- <way id="706149112" visible="true" version="6" changeset="135051904" timestamp="2023-04-18T10:15:24Z" user="CactiStaccingCrane" uid="14538650">
+ <way id="706149112" visible="true" version="8" changeset="145021765" timestamp="2023-12-12T04:31:31Z" user="phoenixsaigon1698" uid="3323343">
   <nd ref="4640564917"/>
   <nd ref="6635110270"/>
   <nd ref="6635110269"/>
@@ -7525,7 +7524,7 @@
   <nd ref="6635110260"/>
   <nd ref="6635110259"/>
   <nd ref="6635110258"/>
-  <nd ref="6635110257"/>
+  <nd ref="104824964"/>
   <nd ref="6635110256"/>
   <nd ref="6635110255"/>
   <nd ref="6635110254"/>
@@ -8030,7 +8029,7 @@
   <tag k="admin_level" v="8"/>
   <tag k="boundary" v="administrative"/>
  </way>
- <way id="843817929" visible="true" version="4" changeset="141283099" timestamp="2023-09-15T03:48:13Z" user="vietnam321" uid="11196308">
+ <way id="843817929" visible="true" version="5" changeset="145023033" timestamp="2023-12-12T05:48:21Z" user="ItsLouisAnderson" uid="11691953">
   <nd ref="7871447342"/>
   <nd ref="7871447343"/>
   <nd ref="2294322901"/>
@@ -8045,9 +8044,10 @@
   <tag k="addr:city" v="Hà Nội"/>
   <tag k="addr:district" v="Ba Đình"/>
   <tag k="addr:housenumber" v="11"/>
-  <tag k="addr:street" v="Cửa Bắc"/>
+  <tag k="addr:province" v="Hà Nội"/>
+  <tag k="addr:street" v="Phố Cửa Bắc"/>
+  <tag k="addr:subdistrict" v="Trúc Bạch"/>
   <tag k="building" v="office"/>
-  <tag k="building:levels" v="5"/>
   <tag k="name" v="Toà nhà EVN"/>
   <tag k="name:en" v="EVN Tower"/>
  </way>
@@ -10223,7 +10223,7 @@
   <nd ref="10979075538"/>
   <tag k="building" v="yes"/>
  </way>
- <way id="1182274034" visible="true" version="1" changeset="137375133" timestamp="2023-06-15T14:50:13Z" user="vietnam321" uid="11196308">
+ <way id="1182274034" visible="true" version="2" changeset="145023033" timestamp="2023-12-12T05:48:21Z" user="ItsLouisAnderson" uid="11691953">
   <nd ref="6579928648"/>
   <nd ref="10979075542"/>
   <nd ref="10979075543"/>
@@ -10232,8 +10232,12 @@
   <nd ref="6579928640"/>
   <nd ref="6579928660"/>
   <nd ref="6579928648"/>
+  <tag k="addr:city" v="Hà Nội"/>
+  <tag k="addr:district" v="Ba Đình"/>
   <tag k="addr:housenumber" v="9A"/>
+  <tag k="addr:province" v="Hà Nội"/>
   <tag k="addr:street" v="Phố Phạm Hồng Thái"/>
+  <tag k="addr:subdistrict" v="Nguyễn Trung Trực"/>
   <tag k="amenity" v="school"/>
   <tag k="name" v="Trường Tiểu học Nguyễn Trung Trực"/>
  </way>
@@ -10825,6 +10829,19 @@
   <nd ref="11398101984"/>
   <nd ref="11398094005"/>
  </way>
+ <way id="1230511558" visible="true" version="1" changeset="145023033" timestamp="2023-12-12T05:48:21Z" user="ItsLouisAnderson" uid="11691953">
+  <nd ref="7871447344"/>
+  <nd ref="2294322900"/>
+  <nd ref="2294322901"/>
+  <nd ref="7871447343"/>
+  <nd ref="7871447342"/>
+  <nd ref="2294322895"/>
+  <nd ref="2294322907"/>
+  <nd ref="7871447345"/>
+  <nd ref="7871447344"/>
+  <tag k="building:levels" v="5"/>
+  <tag k="building:part" v="yes"/>
+ </way>
  <relation id="1903516" visible="true" version="92" changeset="140800950" timestamp="2023-09-04T11:47:25Z" user="rocainunwired" uid="7155095">
   <member type="node" ref="74132064" role="label"/>
   <member type="way" ref="483149600" role="outer"/>
@@ -11137,7 +11154,7 @@
   <tag k="usage" v="main"/>
   <tag k="wikipedia" v="vi:Đường sắt Hà Nội - Hải Phòng"/>
  </relation>
- <relation id="7385001" visible="true" version="149" changeset="144512556" timestamp="2023-11-27T15:26:19Z" user="phoenixsaigon1698" uid="3323343">
+ <relation id="7385001" visible="true" version="150" changeset="145021179" timestamp="2023-12-12T03:51:36Z" user="phoenixsaigon1698" uid="3323343">
   <member type="way" ref="701424047" role=""/>
   <member type="way" ref="506316676" role=""/>
   <member type="way" ref="702522171" role=""/>
@@ -11303,6 +11320,7 @@
   <member type="way" ref="1219945375" role=""/>
   <member type="way" ref="769785757" role=""/>
   <member type="way" ref="943964875" role=""/>
+  <member type="way" ref="1230498759" role=""/>
   <member type="way" ref="702469512" role=""/>
   <member type="way" ref="702469511" role=""/>
   <member type="way" ref="292907006" role=""/>
@@ -12112,7 +12130,7 @@
   <tag k="type" v="boundary"/>
   <tag k="wikidata" v="Q14637505"/>
  </relation>
- <relation id="12725863" visible="true" version="23" changeset="144388856" timestamp="2023-11-24T02:39:04Z" user="phoenixsaigon1698" uid="3323343">
+ <relation id="12725863" visible="true" version="26" changeset="145021230" timestamp="2023-12-12T03:54:56Z" user="phoenixsaigon1698" uid="3323343">
   <member type="node" ref="8835043626" role="platform"/>
   <member type="node" ref="8831817104" role="platform"/>
   <member type="node" ref="7132790440" role="platform"/>
@@ -12158,8 +12176,9 @@
   <member type="way" ref="292907006" role=""/>
   <member type="way" ref="702469511" role=""/>
   <member type="way" ref="702469512" role=""/>
+  <member type="way" ref="1230498759" role=""/>
   <member type="way" ref="136528941" role=""/>
-  <member type="way" ref="702938914" role=""/>
+  <member type="way" ref="1230287866" role=""/>
   <member type="way" ref="28102135" role=""/>
   <member type="way" ref="703214348" role=""/>
   <member type="way" ref="11705879" role=""/>
@@ -12423,7 +12442,7 @@
   <tag k="route_master" v="bus"/>
   <tag k="type" v="route_master"/>
  </relation>
- <relation id="12746734" visible="true" version="31" changeset="144388856" timestamp="2023-11-24T02:39:04Z" user="phoenixsaigon1698" uid="3323343">
+ <relation id="12746734" visible="true" version="34" changeset="145021230" timestamp="2023-12-12T03:54:56Z" user="phoenixsaigon1698" uid="3323343">
   <member type="node" ref="8757875250" role="platform"/>
   <member type="node" ref="8757875251" role="platform"/>
   <member type="node" ref="738813681" role="platform"/>
@@ -12512,8 +12531,9 @@
   <member type="way" ref="292907006" role=""/>
   <member type="way" ref="702469511" role=""/>
   <member type="way" ref="702469512" role=""/>
+  <member type="way" ref="1230498759" role=""/>
   <member type="way" ref="136528941" role=""/>
-  <member type="way" ref="702938914" role=""/>
+  <member type="way" ref="1230287866" role=""/>
   <member type="way" ref="28102135" role=""/>
   <member type="way" ref="703214348" role=""/>
   <member type="way" ref="11705879" role=""/>
@@ -13000,7 +13020,7 @@
   <tag k="to" v="Đại học Mỏ"/>
   <tag k="type" v="route"/>
  </relation>
- <relation id="12835459" visible="true" version="21" changeset="144389131" timestamp="2023-11-24T03:00:51Z" user="phoenixsaigon1698" uid="3323343">
+ <relation id="12835459" visible="true" version="22" changeset="144851745" timestamp="2023-12-07T04:20:37Z" user="vietnam321" uid="11196308">
   <member type="node" ref="8822946796" role="platform"/>
   <member type="node" ref="8822946798" role="platform"/>
   <member type="node" ref="8822946799" role="platform"/>
@@ -13126,7 +13146,6 @@
   <member type="way" ref="961661880" role=""/>
   <member type="way" ref="408484144" role=""/>
   <member type="way" ref="971422903" role=""/>
-  <member type="way" ref="601913193" role=""/>
   <member type="way" ref="599618293" role=""/>
   <member type="way" ref="951487942" role=""/>
   <member type="way" ref="838419178" role=""/>
@@ -13354,7 +13373,7 @@
   <tag k="to" v="Bến xe Yên Nghĩa"/>
   <tag k="type" v="route"/>
  </relation>
- <relation id="12849886" visible="true" version="25" changeset="143457616" timestamp="2023-11-01T07:12:18Z" user="hoanganhlami33" uid="14252795">
+ <relation id="12849886" visible="true" version="26" changeset="145021179" timestamp="2023-12-12T03:51:36Z" user="phoenixsaigon1698" uid="3323343">
   <member type="node" ref="8835043626" role="platform"/>
   <member type="node" ref="8831817106" role="platform"/>
   <member type="node" ref="8835043628" role="platform"/>
@@ -13396,6 +13415,7 @@
   <member type="way" ref="292907006" role=""/>
   <member type="way" ref="702469511" role=""/>
   <member type="way" ref="702469512" role=""/>
+  <member type="way" ref="1230498759" role=""/>
   <member type="way" ref="943964875" role=""/>
   <member type="way" ref="769785757" role=""/>
   <member type="way" ref="1219945375" role=""/>
@@ -13698,7 +13718,7 @@
   <tag k="route_master" v="bus"/>
   <tag k="type" v="route_master"/>
  </relation>
- <relation id="12851814" visible="true" version="42" changeset="143766821" timestamp="2023-11-08T07:37:59Z" user="ItsLouisAnderson" uid="11691953">
+ <relation id="12851814" visible="true" version="43" changeset="145021179" timestamp="2023-12-12T03:51:36Z" user="phoenixsaigon1698" uid="3323343">
   <member type="node" ref="10028987068" role="platform"/>
   <member type="node" ref="8770739144" role="platform"/>
   <member type="node" ref="8770739145" role="platform"/>
@@ -13852,13 +13872,14 @@
   <member type="way" ref="292907006" role=""/>
   <member type="way" ref="702469511" role=""/>
   <member type="way" ref="702469512" role=""/>
+  <member type="way" ref="1230498759" role=""/>
+  <member type="way" ref="37450029" role=""/>
+  <member type="way" ref="703206412" role=""/>
+  <member type="way" ref="703204202" role=""/>
+  <member type="way" ref="618377255" role=""/>
+  <member type="way" ref="618377256" role=""/>
   <member type="way" ref="10231922" role=""/>
   <member type="way" ref="965574228" role=""/>
-  <member type="way" ref="618377256" role=""/>
-  <member type="way" ref="618377255" role=""/>
-  <member type="way" ref="703204202" role=""/>
-  <member type="way" ref="703206412" role=""/>
-  <member type="way" ref="37450029" role=""/>
   <member type="way" ref="706716347" role=""/>
   <member type="way" ref="750372172" role=""/>
   <member type="way" ref="706716343" role=""/>
@@ -13906,7 +13927,7 @@
   <tag k="route_master" v="bus"/>
   <tag k="type" v="route_master"/>
  </relation>
- <relation id="12926540" visible="true" version="9" changeset="142616207" timestamp="2023-10-15T12:44:43Z" user="CactiStaccingCrane" uid="14538650">
+ <relation id="12926540" visible="true" version="11" changeset="145021179" timestamp="2023-12-12T03:51:36Z" user="phoenixsaigon1698" uid="3323343">
   <member type="node" ref="8835043626" role="platform"/>
   <member type="node" ref="8831817106" role="platform"/>
   <member type="node" ref="738813955" role="platform"/>
@@ -13940,9 +13961,10 @@
   <member type="way" ref="292907006" role=""/>
   <member type="way" ref="702469511" role=""/>
   <member type="way" ref="702469512" role=""/>
+  <member type="way" ref="1230498759" role=""/>
   <member type="way" ref="943964875" role=""/>
-  <member type="way" ref="10231922" role=""/>
   <member type="way" ref="965574228" role=""/>
+  <member type="way" ref="10231922" role=""/>
   <member type="way" ref="618377256" role=""/>
   <member type="way" ref="618377255" role=""/>
   <member type="way" ref="703204202" role=""/>
@@ -13952,6 +13974,7 @@
   <member type="way" ref="703778655" role=""/>
   <member type="way" ref="702919022" role=""/>
   <member type="way" ref="702919018" role=""/>
+  <member type="way" ref="1229198986" role=""/>
   <member type="way" ref="710191402" role=""/>
   <member type="way" ref="710191403" role=""/>
   <member type="way" ref="964318757" role=""/>
@@ -13979,7 +14002,7 @@
   <tag k="to" v="Bát Tràng"/>
   <tag k="type" v="route"/>
  </relation>
- <relation id="12926541" visible="true" version="10" changeset="144800758" timestamp="2023-12-05T17:34:27Z" user="FanaticAir75626" uid="11141338">
+ <relation id="12926541" visible="true" version="11" changeset="144850022" timestamp="2023-12-07T02:17:22Z" user="phoenixsaigon1698" uid="3323343">
   <member type="node" ref="8900275020" role="platform"/>
   <member type="node" ref="8900275022" role="platform"/>
   <member type="node" ref="8900275023" role="platform"/>
@@ -14011,6 +14034,7 @@
   <member type="way" ref="964318757" role=""/>
   <member type="way" ref="710191403" role=""/>
   <member type="way" ref="710191402" role=""/>
+  <member type="way" ref="1229198986" role=""/>
   <member type="way" ref="702919018" role=""/>
   <member type="way" ref="702919021" role=""/>
   <member type="way" ref="702919020" role=""/>
@@ -14617,7 +14641,7 @@
   <tag k="to" v="Cổ Nhuế"/>
   <tag k="type" v="route"/>
  </relation>
- <relation id="12966143" visible="true" version="23" changeset="144002028" timestamp="2023-11-14T09:28:14Z" user="iloveosm2004" uid="20517681">
+ <relation id="12966143" visible="true" version="26" changeset="145021230" timestamp="2023-12-12T03:54:56Z" user="phoenixsaigon1698" uid="3323343">
   <member type="node" ref="8920049626" role="platform"/>
   <member type="node" ref="8920049629" role="platform"/>
   <member type="node" ref="7294677886" role="platform"/>
@@ -14706,8 +14730,9 @@
   <member type="way" ref="292907006" role=""/>
   <member type="way" ref="702469511" role=""/>
   <member type="way" ref="702469512" role=""/>
+  <member type="way" ref="1230498759" role=""/>
   <member type="way" ref="136528941" role=""/>
-  <member type="way" ref="702938914" role=""/>
+  <member type="way" ref="1230287866" role=""/>
   <member type="way" ref="28102135" role=""/>
   <member type="way" ref="703214348" role=""/>
   <member type="way" ref="11706025" role=""/>
@@ -14737,7 +14762,7 @@
   <tag k="route_master" v="bus"/>
   <tag k="type" v="route_master"/>
  </relation>
- <relation id="12978666" visible="true" version="7" changeset="142616207" timestamp="2023-10-15T12:44:43Z" user="CactiStaccingCrane" uid="14538650">
+ <relation id="12978666" visible="true" version="8" changeset="145021179" timestamp="2023-12-12T03:51:36Z" user="phoenixsaigon1698" uid="3323343">
   <member type="node" ref="8835043626" role="platform"/>
   <member type="node" ref="8831817105" role="platform"/>
   <member type="node" ref="738813955" role="platform"/>
@@ -14779,9 +14804,10 @@
   <member type="way" ref="292907006" role=""/>
   <member type="way" ref="702469511" role=""/>
   <member type="way" ref="702469512" role=""/>
+  <member type="way" ref="1230498759" role=""/>
   <member type="way" ref="943964875" role=""/>
-  <member type="way" ref="10231922" role=""/>
   <member type="way" ref="965574228" role=""/>
+  <member type="way" ref="10231922" role=""/>
   <member type="way" ref="618377256" role=""/>
   <member type="way" ref="618377255" role=""/>
   <member type="way" ref="703204202" role=""/>
@@ -15122,7 +15148,7 @@
   <tag k="to" v="Sân bay Nội Bài"/>
   <tag k="type" v="route"/>
  </relation>
- <relation id="12981412" visible="true" version="23" changeset="143457616" timestamp="2023-11-01T07:12:18Z" user="hoanganhlami33" uid="14252795">
+ <relation id="12981412" visible="true" version="24" changeset="145021179" timestamp="2023-12-12T03:51:36Z" user="phoenixsaigon1698" uid="3323343">
   <member type="node" ref="5404990957" role="platform"/>
   <member type="node" ref="8927363887" role="platform"/>
   <member type="node" ref="8927529643" role="platform"/>
@@ -15188,6 +15214,7 @@
   <member type="way" ref="292907006" role=""/>
   <member type="way" ref="702469511" role=""/>
   <member type="way" ref="702469512" role=""/>
+  <member type="way" ref="1230498759" role=""/>
   <member type="way" ref="943964875" role=""/>
   <member type="way" ref="769785757" role=""/>
   <member type="way" ref="1219945375" role=""/>
@@ -15326,7 +15353,7 @@
   <tag k="route_master" v="bus"/>
   <tag k="type" v="route_master"/>
  </relation>
- <relation id="12989441" visible="true" version="14" changeset="144389268" timestamp="2023-11-24T03:07:22Z" user="phoenixsaigon1698" uid="3323343">
+ <relation id="12989441" visible="true" version="18" changeset="145021230" timestamp="2023-12-12T03:54:56Z" user="phoenixsaigon1698" uid="3323343">
   <member type="node" ref="8835043626" role="platform"/>
   <member type="node" ref="8831817104" role="platform"/>
   <member type="node" ref="7132790440" role="platform"/>
@@ -15380,8 +15407,9 @@
   <member type="way" ref="292907006" role=""/>
   <member type="way" ref="702469511" role=""/>
   <member type="way" ref="702469512" role=""/>
+  <member type="way" ref="1230498759" role=""/>
   <member type="way" ref="136528941" role=""/>
-  <member type="way" ref="702938914" role=""/>
+  <member type="way" ref="1230287866" role=""/>
   <member type="way" ref="28102135" role=""/>
   <member type="way" ref="703214348" role=""/>
   <member type="way" ref="11705879" role=""/>
@@ -15401,7 +15429,6 @@
   <member type="way" ref="961661880" role=""/>
   <member type="way" ref="971422903" role=""/>
   <member type="way" ref="408484144" role=""/>
-  <member type="way" ref="601913193" role=""/>
   <member type="way" ref="599618293" role=""/>
   <member type="way" ref="951487942" role=""/>
   <member type="way" ref="35972484" role=""/>
@@ -15675,7 +15702,7 @@
   <tag k="to" v="Long Biên"/>
   <tag k="type" v="route"/>
  </relation>
- <relation id="12993137" visible="true" version="12" changeset="144512116" timestamp="2023-11-27T15:14:05Z" user="phoenixsaigon1698" uid="3323343">
+ <relation id="12993137" visible="true" version="15" changeset="145021230" timestamp="2023-12-12T03:54:56Z" user="phoenixsaigon1698" uid="3323343">
   <member type="node" ref="8835043626" role="platform"/>
   <member type="node" ref="8831817104" role="platform"/>
   <member type="node" ref="7132790440" role="platform"/>
@@ -15725,8 +15752,9 @@
   <member type="way" ref="292907006" role=""/>
   <member type="way" ref="702469511" role=""/>
   <member type="way" ref="702469512" role=""/>
+  <member type="way" ref="1230498759" role=""/>
   <member type="way" ref="136528941" role=""/>
-  <member type="way" ref="702938914" role=""/>
+  <member type="way" ref="1230287866" role=""/>
   <member type="way" ref="28102135" role=""/>
   <member type="way" ref="11705879" role=""/>
   <member type="way" ref="605231624" role=""/>
@@ -16177,7 +16205,7 @@
   <tag k="to" v="Khu đô thị Trung Văn"/>
   <tag k="type" v="route"/>
  </relation>
- <relation id="13009892" visible="true" version="16" changeset="143045996" timestamp="2023-10-24T04:29:46Z" user="phoenixsaigon1698" uid="3323343">
+ <relation id="13009892" visible="true" version="18" changeset="145021179" timestamp="2023-12-12T03:51:36Z" user="phoenixsaigon1698" uid="3323343">
   <member type="node" ref="8943684253" role="platform"/>
   <member type="node" ref="8943684252" role="platform"/>
   <member type="node" ref="8943684250" role="platform"/>
@@ -16242,6 +16270,7 @@
   <member type="way" ref="705810329" role=""/>
   <member type="way" ref="706461436" role=""/>
   <member type="way" ref="947077256" role=""/>
+  <member type="way" ref="1230486657" role=""/>
   <member type="way" ref="705810327" role=""/>
   <member type="way" ref="711526159" role=""/>
   <member type="way" ref="705815118" role=""/>
@@ -16301,6 +16330,7 @@
   <member type="way" ref="292907006" role=""/>
   <member type="way" ref="702469511" role=""/>
   <member type="way" ref="702469512" role=""/>
+  <member type="way" ref="1230498759" role=""/>
   <member type="way" ref="943964875" role=""/>
   <member type="way" ref="965574228" role=""/>
   <member type="way" ref="10231922" role=""/>
@@ -16349,7 +16379,7 @@
   <tag k="route_master" v="bus"/>
   <tag k="type" v="route_master"/>
  </relation>
- <relation id="13084716" visible="true" version="22" changeset="144800758" timestamp="2023-12-05T17:34:27Z" user="FanaticAir75626" uid="11141338">
+ <relation id="13084716" visible="true" version="23" changeset="145021179" timestamp="2023-12-12T03:51:36Z" user="phoenixsaigon1698" uid="3323343">
   <member type="node" ref="8835043626" role="platform"/>
   <member type="node" ref="8831817105" role="platform"/>
   <member type="node" ref="738813955" role="platform"/>
@@ -16395,6 +16425,7 @@
   <member type="way" ref="292907006" role=""/>
   <member type="way" ref="702469511" role=""/>
   <member type="way" ref="702469512" role=""/>
+  <member type="way" ref="1230498759" role=""/>
   <member type="way" ref="943964875" role=""/>
   <member type="way" ref="965574228" role=""/>
   <member type="way" ref="10231922" role=""/>
@@ -16652,7 +16683,7 @@
   <tag k="route_master" v="bus"/>
   <tag k="type" v="route_master"/>
  </relation>
- <relation id="13123897" visible="true" version="6" changeset="144270307" timestamp="2023-11-21T04:22:26Z" user="FanaticAir75626" uid="11141338">
+ <relation id="13123897" visible="true" version="7" changeset="145021179" timestamp="2023-12-12T03:51:36Z" user="phoenixsaigon1698" uid="3323343">
   <member type="node" ref="8835043626" role="platform"/>
   <member type="node" ref="8831817105" role="platform"/>
   <member type="node" ref="738813955" role="platform"/>
@@ -16697,6 +16728,7 @@
   <member type="way" ref="292907006" role=""/>
   <member type="way" ref="702469511" role=""/>
   <member type="way" ref="702469512" role=""/>
+  <member type="way" ref="1230498759" role=""/>
   <member type="way" ref="943964875" role=""/>
   <member type="way" ref="965574228" role=""/>
   <member type="way" ref="10231922" role=""/>
@@ -17297,7 +17329,7 @@
   <tag k="route_master" v="bus"/>
   <tag k="type" v="route_master"/>
  </relation>
- <relation id="13925453" visible="true" version="17" changeset="144270307" timestamp="2023-11-21T04:22:26Z" user="FanaticAir75626" uid="11141338">
+ <relation id="13925453" visible="true" version="18" changeset="145021179" timestamp="2023-12-12T03:51:36Z" user="phoenixsaigon1698" uid="3323343">
   <member type="node" ref="8936462893" role="platform"/>
   <member type="node" ref="738815727" role="platform"/>
   <member type="node" ref="738815693" role="platform"/>
@@ -17383,6 +17415,7 @@
   <member type="way" ref="292907006" role=""/>
   <member type="way" ref="702469511" role=""/>
   <member type="way" ref="702469512" role=""/>
+  <member type="way" ref="1230498759" role=""/>
   <member type="way" ref="943964875" role=""/>
   <member type="way" ref="965574228" role=""/>
   <member type="way" ref="10231922" role=""/>
@@ -17685,7 +17718,7 @@
   <tag k="landuse" v="residential"/>
   <tag k="type" v="multipolygon"/>
  </relation>
- <relation id="14062704" visible="true" version="16" changeset="144512116" timestamp="2023-11-27T15:14:05Z" user="phoenixsaigon1698" uid="3323343">
+ <relation id="14062704" visible="true" version="19" changeset="145021230" timestamp="2023-12-12T03:54:56Z" user="phoenixsaigon1698" uid="3323343">
   <member type="node" ref="8835043626" role="platform"/>
   <member type="node" ref="8831817105" role="platform"/>
   <member type="node" ref="738813955" role="platform"/>
@@ -17726,8 +17759,9 @@
   <member type="way" ref="292907006" role=""/>
   <member type="way" ref="702469511" role=""/>
   <member type="way" ref="702469512" role=""/>
+  <member type="way" ref="1230498759" role=""/>
   <member type="way" ref="136528941" role=""/>
-  <member type="way" ref="702938914" role=""/>
+  <member type="way" ref="1230287866" role=""/>
   <member type="way" ref="28102135" role=""/>
   <member type="way" ref="703214348" role=""/>
   <member type="way" ref="11705879" role=""/>
@@ -17862,7 +17896,7 @@
   <tag k="type" v="route"/>
   <tag k="via" v="Bờ Hồ"/>
  </relation>
- <relation id="14062705" visible="true" version="8" changeset="144512116" timestamp="2023-11-27T15:14:05Z" user="phoenixsaigon1698" uid="3323343">
+ <relation id="14062705" visible="true" version="9" changeset="145020433" timestamp="2023-12-12T03:04:37Z" user="GrabVN_Ngaan" uid="14519322">
   <member type="node" ref="9320083031" role="platform"/>
   <member type="node" ref="8808913249" role="platform"/>
   <member type="node" ref="8808913250" role="platform"/>
@@ -17932,6 +17966,7 @@
   <member type="way" ref="705810329" role=""/>
   <member type="way" ref="706461436" role=""/>
   <member type="way" ref="947077256" role=""/>
+  <member type="way" ref="1230486657" role=""/>
   <member type="way" ref="705810327" role=""/>
   <member type="way" ref="711526159" role=""/>
   <member type="way" ref="705815118" role=""/>

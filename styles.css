@@ -29,7 +29,7 @@ html, body {
       align-items: center;
       position: absolute;
       top: 10px;
-      left: 60px;
+      left: 115px;
       width: 70px;
       height: 63px;
       background-color: white;
@@ -42,6 +42,28 @@ html, body {
       z-index: 500;
   }
   #refreshButton:hover{
+      opacity: 0.8;
+      cursor: pointer;
+  }
+  
+  #showDataButton{
+      display: flex;
+      align-items: center;
+      position: absolute;
+      top: 10px;
+      left: 55px;
+      width: 50px;
+      height: 63px;
+      background-color: white;
+      border-radius: 5px;
+      border-color: gray;
+      border-style: solid;
+      border-width: 1px 1px 1px 1px;
+      opacity: 1;
+      text-align: center;
+      z-index: 500;
+  }
+  #showDataButton:hover{
       opacity: 0.8;
       cursor: pointer;
   }
