@@ -76,6 +76,7 @@ body {
     display: flex;
     align-items: center;
     position: absolute;
+    justify-content: space-evenly;
     top: 85px;
     left: 11px;
     width: 175px;
