@@ -73,6 +73,7 @@ body {
 }
 
 #visualizationButton {
+    display: flex;
     align-items: center;
     position: absolute;
     top: 85px;
