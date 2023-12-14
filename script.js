@@ -30,6 +30,64 @@ class Distance {
 }
 
 // ------------------------------------------------------------------------ //
+// ---------------                Stack class             ----------------- //
+// ------------------------------------------------------------------------ //
+class Stack {
+  constructor() {
+    this.stack = [];
+  }
+
+  push(item) {
+    return this.stack.push(item);
+  }
+
+  pop() {
+    return this.stack.pop();
+  }
+
+  peek() {
+    return this.stack[this.length - 1];
+  }
+
+  get length() {
+    return this.stack.length;
+  }
+
+  isEmpty() {
+    return this.length === 0;
+  }
+}
+
+// ------------------------------------------------------------------------ //
+// ---------------                Queue class             ----------------- //
+// ------------------------------------------------------------------------ //
+class Queue {
+  constructor() {
+    this.queue = [];
+  }
+
+  enqueue(item) {
+    return this.queue.unshift(item);
+  }
+
+  dequeue() {
+    return this.queue.pop();
+  }
+
+  peek() {
+    return this.queue[this.length - 1];
+  }
+
+  get length() {
+    return this.queue.length;
+  }
+
+  isEmpty() {
+    return this.queue.length === 0;
+  }
+}
+
+// ------------------------------------------------------------------------ //
 // ---------------            PriorityQueue class         ----------------- //
 // ------------------------------------------------------------------------ //
 class PriorityQueue {
@@ -254,6 +312,70 @@ function getIndexByNodeId(nodeId) {
   return null;
 }
 
+function toRadians(degrees) {
+  return degrees * (Math.PI / 180);
+}
+
+function distInMeterUnit(node0, node1) {
+  const earthRadius = 6371;
+
+  const lat1Rad = toRadians(node0.lat);
+  const lon1Rad = toRadians(node0.lon);
+  const lat2Rad = toRadians(node1.lat);
+  const lon2Rad = toRadians(node1.lon);
+
+  const dLat = lat2Rad - lat1Rad;
+  const dLon = lon2Rad - lon1Rad;
+
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return earthRadius * c * 1000;
+}
+
+function getDistanceMeterByPath(path) {
+  let d = 0;
+  for (let i = 1; i < path.length; i++) {
+    d = d + distInMeterUnit(path[i - 1], path[i]);
+  }
+  return d.toFixed(2);
+}
+
+function showAlert(path) {
+  var content = "";
+  if (getDistanceMeterByPath(path) == 0) {
+    content = "Please choose the point in the middle of the road!";
+  } else {
+    content += "Source:           (" + path[0].lat + ", " + path[0].lon + ")\n";
+    content += "Destination:    (" + path[path.length - 1].lat + ", " + path[path.length - 1].lon + ")\n";
+    content += "Distance:         " + getDistanceMeterByPath(path) + " meters\n";
+    content += "\nClick OK to see changes!"
+  }
+  alert(content);
+}
+
+async function processPrevWithModeAndId(prev, mode, endId, timeDelay, nodeList = NodeList) {
+  if (StopLoop) return;
+  if (mode == true) {
+    await DELAY(timeDelay * 100);
+    refreshSegemnt();
+  }
+
+  var path = [];
+  var u = getIndexByNodeId(endId);
+  while (u != -1) {
+    path.push(nodeList[u]);
+    u = prev[u];
+  }
+  for (let i = 1; i < path.length; i++) {
+    drawSegment(path[i - 1], path[i]);
+  }
+
+  showAlert(path);
+}
+
 // ------------------------------------------------------------------------ //
 // ---------------          Get data from map.xml         ----------------- //
 // ------------------------------------------------------------------------ //
@@ -361,20 +483,7 @@ async function drawPath_Dijkstra(
     }
   }
 
-  if (mode == true) {
-    await DELAY(timeDelay * 100);
-    refreshSegemnt();
-  }
-
-  var path = [];
-  var u = getIndexByNodeId(end.id);
-  while (u != -1) {
-    path.push(nodeList[u]);
-    u = prev[u];
-  }
-  for (let i = 1; i < path.length; i++) {
-    drawSegment(path[i - 1], path[i]);
-  }
+  processPrevWithModeAndId(prev, mode, end.id, timeDelay);
 }
 
 // ------------------------------------------------------------------------ //
@@ -389,29 +498,29 @@ async function drawPath_BFS(
   timeDelay = 20
 ) {
   var prev = [];
-  for (let i = 0; i < nodeList.length; i++) prev.push(-1);
-
-  let distances = [];
+  var visited = [];
   for (let i = 0; i < nodeList.length; i++) {
-    distances.push(new Distance(MAX_INT, false));
+    prev.push(-1);
+    visited.push(false);
+  }
+  for (let i = 0; i < edgeList.length; i++) {
+    edgeList[i].sort(function (a, b) {
+      return a.w - b.w;
+    });
   }
 
-  distances[getIndexByNodeId(start.id)].value = 0;
-  var pq = new PriorityQueue();
-  pq.add([0, getIndexByNodeId(start.id)]);
+  var queue = new Queue();
+  queue.enqueue(getIndexByNodeId(start.id));
+  visited[getIndexByNodeId(start.id)] = true;
 
-  while (!pq.isEmpty() && !StopLoop) {
-    let u = pq.remove()[1];
-    distances[u].visited = true;
+  while (!queue.isEmpty() && !StopLoop) {
+    let u = queue.dequeue();
 
     for (let i = 0; i < edgeList[u].length; i++) {
       var e = edgeList[u][i];
-      if (
-        !distances[e.v].visited &&
-        distances[u].value + e.w < distances[e.v].value
-      ) {
-        distances[e.v].value = distances[u].value + e.w;
-        pq.add([distances[e.v].value, e.v]);
+      if (!visited[e.v]) {
+        visited[e.v] = true;
+        queue.enqueue(e.v);
         prev[e.v] = u;
 
         if (mode == true) {
@@ -422,20 +531,7 @@ async function drawPath_BFS(
     }
   }
 
-  if (mode == true) {
-    await DELAY(timeDelay * 100);
-    refreshSegemnt();
-  }
-
-  var path = [];
-  var u = getIndexByNodeId(end.id);
-  while (u != -1) {
-    path.push(nodeList[u]);
-    u = prev[u];
-  }
-  for (let i = 1; i < path.length; i++) {
-    drawSegment(path[i - 1], path[i]);
-  }
+  processPrevWithModeAndId(prev, mode, end.id, timeDelay);
 }
 
 // ------------------------------------------------------------------------ //
@@ -450,29 +546,29 @@ async function drawPath_DFS(
   timeDelay = 20
 ) {
   var prev = [];
-  for (let i = 0; i < nodeList.length; i++) prev.push(-1);
-
-  let distances = [];
+  var visited = [];
   for (let i = 0; i < nodeList.length; i++) {
-    distances.push(new Distance(MAX_INT, false));
+    prev.push(-1);
+    visited.push(false);
+  }
+  for (let i = 0; i < edgeList.length; i++) {
+    edgeList[i].sort(function (a, b) {
+      return a.w - b.w;
+    });
   }
 
-  distances[getIndexByNodeId(start.id)].value = 0;
-  var pq = new PriorityQueue();
-  pq.add([0, getIndexByNodeId(start.id)]);
+  var stack = new Stack();
+  stack.push(getIndexByNodeId(start.id));
+  visited[getIndexByNodeId(start.id)] = true;
 
-  while (!pq.isEmpty() && !StopLoop) {
-    let u = pq.remove()[1];
-    distances[u].visited = true;
+  while (!stack.isEmpty() && !StopLoop) {
+    let u = stack.pop();
 
     for (let i = 0; i < edgeList[u].length; i++) {
       var e = edgeList[u][i];
-      if (
-        !distances[e.v].visited &&
-        distances[u].value + e.w < distances[e.v].value
-      ) {
-        distances[e.v].value = distances[u].value + e.w;
-        pq.add([distances[e.v].value, e.v]);
+      if (!visited[e.v]) {
+        visited[e.v] = true;
+        stack.push(e.v);
         prev[e.v] = u;
 
         if (mode == true) {
@@ -483,20 +579,7 @@ async function drawPath_DFS(
     }
   }
 
-  if (mode == true) {
-    await DELAY(timeDelay * 100);
-    refreshSegemnt();
-  }
-
-  var path = [];
-  var u = getIndexByNodeId(end.id);
-  while (u != -1) {
-    path.push(nodeList[u]);
-    u = prev[u];
-  }
-  for (let i = 1; i < path.length; i++) {
-    drawSegment(path[i - 1], path[i]);
-  }
+  processPrevWithModeAndId(prev, mode, end.id, timeDelay);
 }
 
 // ------------------------------------------------------------------------ //
@@ -544,20 +627,7 @@ async function drawPath_ASearch(
     }
   }
 
-  if (mode == true) {
-    await DELAY(timeDelay * 100);
-    refreshSegemnt();
-  }
-
-  var path = [];
-  var u = getIndexByNodeId(end.id);
-  while (u != -1) {
-    path.push(nodeList[u]);
-    u = prev[u];
-  }
-  for (let i = 1; i < path.length; i++) {
-    drawSegment(path[i - 1], path[i]);
-  }
+  processPrevWithModeAndId(prev, mode, end.id, timeDelay);
 }
 
 // ------------------------------------------------------------------------ //
@@ -570,13 +640,25 @@ async function drawPath(option = 0) {
   //   2: DFS
   //   3: A*
   if (option == 0) {
-    await drawPath_Dijkstra(StartNode, EndNode, NodeList, EdgeList, ModeVisualize);
+    await drawPath_Dijkstra(
+      StartNode,
+      EndNode,
+      NodeList,
+      EdgeList,
+      ModeVisualize
+    );
   } else if (option == 1) {
     await drawPath_BFS(StartNode, EndNode, NodeList, EdgeList, ModeVisualize);
   } else if (option == 2) {
     await drawPath_DFS(StartNode, EndNode, NodeList, EdgeList, ModeVisualize);
   } else if (option == 3) {
-    await drawPath_ASearch(StartNode, EndNode, NodeList, EdgeList, ModeVisualize);
+    await drawPath_ASearch(
+      StartNode,
+      EndNode,
+      NodeList,
+      EdgeList,
+      ModeVisualize
+    );
   }
 }
 
@@ -598,10 +680,42 @@ document.querySelectorAll("#dropdownItem a").forEach(function (item) {
     else if (item.textContent == "Depth First Search") Algorithm = 2;
     else if (item.textContent == "A* Search") Algorithm = 3;
     document.getElementById("algo").innerHTML = item.textContent;
+    document.querySelector('.dropdown-content').style.display = 'none';
+
     StopLoop = true;
     await DELAY(100);
-    refreshPointAndSegemnt();
+    refreshSegemnt();
+
+    if (StartNode.lat != -1 && EndNode.lat != -1) {
+      StopLoop = false;
+      drawPath(Algorithm);
+    }
   });
+});
+
+// Add event close dropdown-menu after selecting algorithm for button click
+document.getElementById('algo').addEventListener('click', function(event) {
+  var dropdown = document.getElementById('dropdownItem');
+  if (!event.target.matches('.dropbtn') && !event.target.matches('.dropdown-content a')) {
+    document.getElementById('algo').add('hovered');  
+    dropdown.style.display = 'none';
+  }
+});
+
+// Add an event listener to show the dropdown menu on button click
+document.getElementById('algo').addEventListener('click', function() {
+  var dropdown = document.getElementById('dropdownItem');
+  if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+      dropdown.style.display = 'block';
+  } else {
+      dropdown.style.display = 'none';
+  }
+});
+
+// Add an event listener to close the dropdown menu when the mouse leaves the dropdown area
+document.getElementById('listActionDiv').addEventListener('mouseleave', function() {
+  var dropdown = document.getElementById('dropdownItem');
+  dropdown.style.display = 'none';
 });
 
 // Add event visualization mode for button click
@@ -612,10 +726,10 @@ document
     ModeVisualize = !ModeVisualize;
     if (ModeVisualize)
       document.getElementById("visualizationButton").innerHTML =
-        "Visualization mode: <strong>ON</strong>";
+        "Visualization mode: <strong>&nbsp;ON</strong>";
     else
       document.getElementById("visualizationButton").innerHTML =
-        "Visualization mode: <strong>OFF</strong>";
+        "Visualization mode: <strong>&nbsp;OFF</strong>";
   });
 
 // Add event show all data for button click
