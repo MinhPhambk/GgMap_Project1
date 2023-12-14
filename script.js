@@ -463,6 +463,7 @@ async function drawPath_Dijkstra(
 
   while (!pq.isEmpty() && !StopLoop) {
     let u = pq.remove()[1];
+    if (nodeList[u].id == end.id) break; 
     distances[u].visited = true;
 
     for (let i = 0; i < edgeList[u].length; i++) {
@@ -515,6 +516,7 @@ async function drawPath_BFS(
 
   while (!queue.isEmpty() && !StopLoop) {
     let u = queue.dequeue();
+    if (nodeList[u].id == end.id) break; 
 
     for (let i = 0; i < edgeList[u].length; i++) {
       var e = edgeList[u][i];
@@ -563,6 +565,7 @@ async function drawPath_DFS(
 
   while (!stack.isEmpty() && !StopLoop) {
     let u = stack.pop();
+    if (nodeList[u].id == end.id) break; 
 
     for (let i = 0; i < edgeList[u].length; i++) {
       var e = edgeList[u][i];
@@ -607,6 +610,7 @@ async function drawPath_ASearch(
 
   while (!pq.isEmpty() && !StopLoop) {
       let u = pq.remove()[1];
+      if (nodeList[u].id == end.id) break; 
       distances[u].visited = true;
 
       for (let i = 0; i < edgeList[u].length; i++) {
@@ -674,7 +678,7 @@ document
 // Add event select algorithm for button click
 document.querySelectorAll("#dropdownItem a").forEach(function (item) {
   item.addEventListener("click", async function () {
-    if (item.textContent == "Dijkstra") Algorithm = 0;
+    if (item.textContent == "Dijkstra's Algorithm") Algorithm = 0;
     else if (item.textContent == "Breadth First Search") Algorithm = 1;
     else if (item.textContent == "Depth First Search") Algorithm = 2;
     else if (item.textContent == "A* Search") Algorithm = 3;
