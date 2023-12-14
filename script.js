@@ -289,7 +289,7 @@ function dist(item1, item2) {
 function getNearestNode(node) {
   var min_d = dist(node, NodeList[0]);
   var index = 0;
-  for (let i = 0; i < EdgeList.length; i++) {
+  for (let i = 0; i < NodeList.length; i++) {
     if (dist(node, NodeList[i]) < min_d) {
       min_d = dist(node, NodeList[i]);
       index = i;
@@ -298,34 +298,50 @@ function getNearestNode(node) {
   return NodeList[index];
 }
 
+function toCartesian(node) {
+  let R = 6371;
+  latitude = node.lat;
+  longitude = node.lon;
+  var latRad = toRadians(latitude);
+  var lonRad = toRadians(longitude);
+
+  var x = R * Math.cos(latRad) * Math.cos(lonRad);
+  var y = R * Math.cos(latRad) * Math.sin(lonRad);
+
+  return {x: x, y: y};
+}
+
 function distanceToEdge(node, node1, node2) {
-  var d = Math.abs((node2.lat - node1.lat)*node.lon + (node1.lon - node2.lon)*node.lat + (node2.lon*node1.lat - node1.lon*node2.lat));
-  d = d / dist(node1, node2);
+  var {x, y} = toCartesian(node);
+  var {x: x1,y: y1} = toCartesian(node1);
+  var {x: x2,y: y2} = toCartesian(node2);
+  var d = Math.abs((y2 - y1)*x + (x1 - x2)*y + (x2*y1 - x1*y2));
+  d = d / Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
   return d;
 }
 
 function getNearestEdge(node) {
   var min_d = MAX_INT;
-  var index1;
-  var index2;
-  for (let i = 0; i < EdgeList.length; i++) {
-    var node1 = NodeList[i];
+  var index1 = -1;
+  var index2 = -1;
+  var node1 = getNearestNode(node);
+  var i = getIndexByNodeId(node1.id);
     for (let j = 0; j < EdgeList[i].length; j++) {
-      var node2 = getNodeById(EdgeList[i][j].v);
-      var temp = distanceToEdge(node, node1, node2);
+      var node2 = NodeList[EdgeList[i][j].v];
+      var temp = dist(node, node2);
       if (min_d > temp) {
         min_d = temp;
         index1 = i;
         index2 = j;
       }
-    }
+    
   }
   return [index1, index2];
 }
 
 function projectionToEdge(node, index1, index2) {
   var node1 = NodeList[index1];
-  var node2 = getNodeById(EdgeList[index1][index2].v);
+  var node2 = NodeList[EdgeList[index1][index2].v];
   var t = (node.lon - node1.lon)*(node2.lon - node1.lon) + (node.lat - node1.lat)*(node2.lat - node1.lat);
   var d = dist(node1, node2)*dist(node1, node2);
   t = t/d;
@@ -437,17 +453,40 @@ function getDataXml(xmlFile) {
 function getDataNodes(xmlDoc) {
   var nodeList = [];
 
-  var nodes = xmlDoc.getElementsByTagName("node");
-  for (let i = 0; i < nodes.length; i++) {
-    const node = nodes[i];
-    const id = node.id;
-    const lat = node.attributes[7].nodeValue;
-    const lon = node.attributes[8].nodeValue;
-    nodeList.push(new Node(id, lat, lon));
+  var ways = xmlDoc.getElementsByTagName("way");
+  for (let i = 0; i < ways.length; i++) {
+    var tags = ways[i].getElementsByTagName("tag");
+    var isHighway = false;
+    for (let j = 0; j < tags.length; j++) {
+      if (tags[j].getAttribute("k") === "highway" && tags[j].getAttribute("v") != "footway") {
+        isHighway = true;
+        break;
+      }
+    }
+    if (!isHighway) continue;
+
+    var nodes_in_way = ways[i].getElementsByTagName("nd");
+    for (let j = 0; j < nodes_in_way.length; j++) {
+      var node = nodes_in_way[j];
+      const id = node.getAttribute("ref");
+      var lat = 0;
+      var lon = 0;
+      //find node with the same id
+      var allNodes = xmlDoc.getElementsByTagName("node");
+      for (let k = 0; k < allNodes.length; k++) {
+        if (allNodes[k].getAttribute("id") === id) {
+          lat = allNodes[k].getAttribute("lat");
+          lon = allNodes[k].getAttribute("lon");
+          break;
+        }
+      }
+      nodeList.push(new Node(id, lat, lon));
+    }
   }
 
   return nodeList;
 }
+
 
 function getDataEdges(xmlDoc) {
   var edgeList = [];
@@ -459,10 +498,20 @@ function getDataEdges(xmlDoc) {
 
   var ways = xmlDoc.getElementsByTagName("way");
   for (let i = 0; i < ways.length; i++) {
+    var tags = ways[i].getElementsByTagName("tag");
+    var isHighway = false;
+    for (let j = 0; j < tags.length; j++) {
+      if (tags[j].getAttribute("k") == "highway" && tags[j].getAttribute("v") != "footway") {
+        isHighway = true;
+        break;
+      }
+    }
+    if (!isHighway) continue;
+
     var nodes_in_way = ways[i].getElementsByTagName("nd");
     for (let j = 1; j < nodes_in_way.length; j++) {
-      var id0 = nodes_in_way[j - 1].attributes[0].nodeValue;
-      var id1 = nodes_in_way[j].attributes[0].nodeValue;
+      var id0 = nodes_in_way[j - 1].getAttribute("ref");
+      var id1 = nodes_in_way[j].getAttribute("ref");
       var w = dist(getNodeById(id0), getNodeById(id1));
       var u = getIndexByNodeId(id0);
       var v = getIndexByNodeId(id1);
@@ -473,6 +522,7 @@ function getDataEdges(xmlDoc) {
 
   return edgeList;
 }
+
 
 // ------------------------------------------------------------------------ //
 // ---------------          Dijkstra's algorithm          ----------------- //
@@ -500,6 +550,7 @@ async function drawPath_Dijkstra(
   while (!pq.isEmpty() && !StopLoop) {
     let u = pq.remove()[1];
     distances[u].visited = true;
+    if (nodeList[u] == end) break;
 
     for (let i = 0; i < edgeList[u].length; i++) {
       var e = edgeList[u][i];
@@ -551,6 +602,7 @@ async function drawPath_BFS(
 
   while (!queue.isEmpty() && !StopLoop) {
     let u = queue.dequeue();
+    if (nodeList[u] == end) break;
 
     for (let i = 0; i < edgeList[u].length; i++) {
       var e = edgeList[u][i];
@@ -599,6 +651,7 @@ async function drawPath_DFS(
 
   while (!stack.isEmpty() && !StopLoop) {
     let u = stack.pop();
+    if (nodeList[u] == end) break;
 
     for (let i = 0; i < edgeList[u].length; i++) {
       var e = edgeList[u][i];
@@ -644,6 +697,7 @@ async function drawPath_ASearch(
   while (!pq.isEmpty() && !StopLoop) {
       let u = pq.remove()[1];
       distances[u].visited = true;
+      if (nodeList[u] == end) break;
 
       for (let i = 0; i < edgeList[u].length; i++) {
           var e = edgeList[u][i];
@@ -797,18 +851,18 @@ map.on("click", async function (e) {
       .bindPopup("From")
       .openPopup()
       .addTo(map);
-    var [i, j] = getNearestEdge(StartNode);
-    //var temp = projectionToEdge(StartNode, i, j);
-    //L.polyline([[StartNode.lat, StartNode.lon], [temp.lat, temp.lon]], {color: 'blue', dashArray: '1, 10'}).addTo(map);
-    StartNode = getNearestNode(StartNode);
+    var [i, j] = getNearestEdge(StartNode); 
   } else if (EndNode.lat == -1) {
     EndNode.lat = e.latlng.lat;
     EndNode.lon = e.latlng.lng;
 
     L.marker([EndNode.lat, EndNode.lon]).bindPopup("To").openPopup().addTo(map);
-    //var [i, j] = getNearestEdge(EndNode);
-    //var temp = projectionToEdge(EndNode, i, j);
-    //L.polyline([[EndNode.lat, EndNode.lon], [temp.lat, temp.lon]], {color: 'blue', dashArray: '1, 10'}).addTo(map);
+
+    var temp1 = getNearestNode(StartNode);
+    L.polyline([[StartNode.lat, StartNode.lon], [temp1.lat, temp1.lon]], {color: 'blue', dashArray: '1, 5'}).addTo(map);
+    StartNode = getNearestNode(StartNode);
+    var temp = getNearestNode(EndNode);
+    L.polyline([[EndNode.lat, EndNode.lon], [temp.lat, temp.lon]], {color: 'blue', dashArray: '1, 5'}).addTo(map);
     EndNode = getNearestNode(EndNode);
     // Algorithm
     drawPath(Algorithm);
