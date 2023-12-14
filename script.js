@@ -298,6 +298,42 @@ function getNearestNode(node) {
   return NodeList[index];
 }
 
+function distanceToEdge(node, node1, node2) {
+  var d = Math.abs((node2.lat - node1.lat)*node.lon + (node1.lon - node2.lon)*node.lat + (node2.lon*node1.lat - node1.lon*node2.lat));
+  d = d / dist(node1, node2);
+  return d;
+}
+
+function getNearestEdge(node) {
+  var min_d = MAX_INT;
+  var index1;
+  var index2;
+  for (let i = 0; i < EdgeList.length; i++) {
+    var node1 = NodeList[i];
+    for (let j = 0; j < EdgeList[i].length; j++) {
+      var node2 = getNodeById(EdgeList[i][j].v);
+      var temp = distanceToEdge(node, node1, node2);
+      if (min_d > temp) {
+        min_d = temp;
+        index1 = i;
+        index2 = j;
+      }
+    }
+  }
+  return [index1, index2];
+}
+
+function projectionToEdge(node, index1, index2) {
+  var node1 = NodeList[index1];
+  var node2 = getNodeById(EdgeList[index1][index2].v);
+  var t = (node.lon - node1.lon)*(node2.lon - node1.lon) + (node.lat - node1.lat)*(node2.lat - node1.lat);
+  var d = dist(node1, node2)*dist(node1, node2);
+  t = t/d;
+  var lon = node1.lon + t*(node2.lon - node1.lon);
+  var lat = node1.lat + t*(node2.lat - node1.lat);
+  return new Node(-1, lat, lon);
+}
+
 function getNodeById(id) {
   for (let i = 0; i < NodeList.length; i++) {
     if (NodeList[i].id == id) return NodeList[i];
@@ -593,12 +629,12 @@ async function drawPath_ASearch(
   mode = false,
   timeDelay = 20
 ) {
-  var prev = [];
+  let prev = [];
   for (let i = 0; i < nodeList.length; i++) prev.push(-1);
 
   let distances = [];
   for (let i = 0; i < nodeList.length; i++) {
-    distances.push(new Distance(MAX_INT, false));
+      distances.push(new Distance(MAX_INT, false));
   }
 
   distances[getIndexByNodeId(start.id)].value = 0;
@@ -606,18 +642,17 @@ async function drawPath_ASearch(
   pq.add([0, getIndexByNodeId(start.id)]);
 
   while (!pq.isEmpty() && !StopLoop) {
-    let u = pq.remove()[1];
-    distances[u].visited = true;
+      let u = pq.remove()[1];
+      distances[u].visited = true;
 
-    for (let i = 0; i < edgeList[u].length; i++) {
-      var e = edgeList[u][i];
-      if (
-        !distances[e.v].visited &&
-        distances[u].value + e.w < distances[e.v].value
-      ) {
-        distances[e.v].value = distances[u].value + e.w;
-        pq.add([distances[e.v].value, e.v]);
-        prev[e.v] = u;
+      for (let i = 0; i < edgeList[u].length; i++) {
+          var e = edgeList[u][i];
+          let newCost = distances[u].value + e.w;
+          if (!distances[e.v].visited && newCost < distances[e.v].value) {
+              distances[e.v].value = newCost;
+              let priority = newCost + dist(nodeList[e.v], end);
+              pq.add([priority, e.v]);
+              prev[e.v] = u;
 
         if (mode == true) {
           await DELAY(timeDelay);
@@ -757,19 +792,24 @@ map.on("click", async function (e) {
     StopLoop = false;
     StartNode.lat = e.latlng.lat;
     StartNode.lon = e.latlng.lng;
-    StartNode = getNearestNode(StartNode);
-
+    
     L.marker([StartNode.lat, StartNode.lon])
       .bindPopup("From")
       .openPopup()
       .addTo(map);
+    var [i, j] = getNearestEdge(StartNode);
+    //var temp = projectionToEdge(StartNode, i, j);
+    //L.polyline([[StartNode.lat, StartNode.lon], [temp.lat, temp.lon]], {color: 'blue', dashArray: '1, 10'}).addTo(map);
+    StartNode = getNearestNode(StartNode);
   } else if (EndNode.lat == -1) {
     EndNode.lat = e.latlng.lat;
     EndNode.lon = e.latlng.lng;
-    EndNode = getNearestNode(EndNode);
 
     L.marker([EndNode.lat, EndNode.lon]).bindPopup("To").openPopup().addTo(map);
-
+    //var [i, j] = getNearestEdge(EndNode);
+    //var temp = projectionToEdge(EndNode, i, j);
+    //L.polyline([[EndNode.lat, EndNode.lon], [temp.lat, temp.lon]], {color: 'blue', dashArray: '1, 10'}).addTo(map);
+    EndNode = getNearestNode(EndNode);
     // Algorithm
     drawPath(Algorithm);
   }
