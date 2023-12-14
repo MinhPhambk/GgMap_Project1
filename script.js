@@ -851,7 +851,6 @@ map.on("click", async function (e) {
       .bindPopup("From")
       .openPopup()
       .addTo(map);
-    var [i, j] = getNearestEdge(StartNode); 
   } else if (EndNode.lat == -1) {
     EndNode.lat = e.latlng.lat;
     EndNode.lon = e.latlng.lng;
