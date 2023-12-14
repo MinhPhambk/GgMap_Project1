@@ -593,12 +593,12 @@ async function drawPath_ASearch(
   mode = false,
   timeDelay = 20
 ) {
-  var prev = [];
+  let prev = [];
   for (let i = 0; i < nodeList.length; i++) prev.push(-1);
 
   let distances = [];
   for (let i = 0; i < nodeList.length; i++) {
-    distances.push(new Distance(MAX_INT, false));
+      distances.push(new Distance(MAX_INT, false));
   }
 
   distances[getIndexByNodeId(start.id)].value = 0;
@@ -606,18 +606,17 @@ async function drawPath_ASearch(
   pq.add([0, getIndexByNodeId(start.id)]);
 
   while (!pq.isEmpty() && !StopLoop) {
-    let u = pq.remove()[1];
-    distances[u].visited = true;
+      let u = pq.remove()[1];
+      distances[u].visited = true;
 
-    for (let i = 0; i < edgeList[u].length; i++) {
-      var e = edgeList[u][i];
-      if (
-        !distances[e.v].visited &&
-        distances[u].value + e.w < distances[e.v].value
-      ) {
-        distances[e.v].value = distances[u].value + e.w;
-        pq.add([distances[e.v].value, e.v]);
-        prev[e.v] = u;
+      for (let i = 0; i < edgeList[u].length; i++) {
+          var e = edgeList[u][i];
+          let newCost = distances[u].value + e.w;
+          if (!distances[e.v].visited && newCost < distances[e.v].value) {
+              distances[e.v].value = newCost;
+              let priority = newCost + dist(nodeList[e.v], end);
+              pq.add([priority, e.v]);
+              prev[e.v] = u;
 
         if (mode == true) {
           await DELAY(timeDelay);
