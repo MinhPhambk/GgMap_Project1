@@ -366,7 +366,7 @@ function showAlert(path, start, end) {
   alert(content);
 }
 
-async function processPrevWithModeAndId(prev, mode, startNode, endNode, timeDelay, nodeList = NodeList) {
+async function processPrevWithModeAndId(prev, mode, timeDelay, startNode = StartNode, endNode = EndNode, nodeList = NodeList) {
   if (StopLoop) return;
   if (mode == true) {
     await DELAY(timeDelay * 100);
@@ -378,7 +378,7 @@ async function processPrevWithModeAndId(prev, mode, startNode, endNode, timeDela
   drawSegment(startNode, startTmp);
 
   var path = [];
-  var u = getIndexByNodeId(endNode.id);
+  var u = getIndexByNodeId(endTmp.id);
   while (u != -1) {
     path.push(nodeList[u]);
     u = prev[u];
@@ -518,7 +518,7 @@ async function drawPath_Dijkstra(
     }
   }
 
-  processPrevWithModeAndId(prev, mode, start, end, timeDelay);
+  processPrevWithModeAndId(prev, mode, timeDelay);
 }
 
 // ------------------------------------------------------------------------ //
@@ -567,7 +567,7 @@ async function drawPath_BFS(
     }
   }
 
-  processPrevWithModeAndId(prev, mode, start, end, timeDelay);
+  processPrevWithModeAndId(prev, mode, timeDelay);
 }
 
 // ------------------------------------------------------------------------ //
@@ -616,7 +616,7 @@ async function drawPath_DFS(
     }
   }
 
-  processPrevWithModeAndId(prev, mode, start, end, timeDelay);
+  processPrevWithModeAndId(prev, mode, timeDelay);
 }
 
 // ------------------------------------------------------------------------ //
@@ -664,7 +664,7 @@ async function drawPath_ASearch(
     }
   }
 
-  processPrevWithModeAndId(prev, mode, start, end, timeDelay);
+  processPrevWithModeAndId(prev, mode, timeDelay);
 }
 
 // ------------------------------------------------------------------------ //
