@@ -6,6 +6,7 @@ class Node {
     this.id = id;
     this.lat = lat;
     this.lon = lon;
+    this.visible = true;
   }
 }
 
@@ -287,10 +288,10 @@ function dist(item1, item2) {
 }
 
 function getNearestNode(node) {
-  var min_d = dist(node, NodeList[0]);
+  var min_d = MAX_INT;
   var index = 0;
   for (let i = 0; i < EdgeList.length; i++) {
-    if (dist(node, NodeList[i]) < min_d) {
+    if (dist(node, NodeList[i]) < min_d && NodeList[i].visible) {
       min_d = dist(node, NodeList[i]);
       index = i;
     }
@@ -335,36 +336,49 @@ function distInMeterUnit(node0, node1) {
   return earthRadius * c * 1000;
 }
 
-function getDistanceMeterByPath(path) {
+function getDistanceMeterByPath(path, startNode, endNode) {
   let d = 0;
-  for (let i = 1; i < path.length; i++) {
-    d = d + distInMeterUnit(path[i - 1], path[i]);
+
+  if (path.length > 1) {
+    for (let i = 1; i < path.length; i++) {
+      d = d + distInMeterUnit(path[i - 1], path[i]);
+    }
+
+    var startTmp = getNearestNode(startNode);
+    var endTmp = getNearestNode(endNode);
+    d = d + distInMeterUnit(startTmp, startNode);
+    d = d + distInMeterUnit(endTmp, endNode);
   }
+  
   return d.toFixed(2);
 }
 
-function showAlert(path) {
+function showAlert(path, start, end) {
   var content = "";
-  if (getDistanceMeterByPath(path) == 0) {
-    content = "Please choose the point in the middle of the road!";
+  if (getDistanceMeterByPath(path, start, end) == 0) {
+    content = "Please try again!";
   } else {
     content += "Source:           (" + path[0].lat + ", " + path[0].lon + ")\n";
     content += "Destination:    (" + path[path.length - 1].lat + ", " + path[path.length - 1].lon + ")\n";
-    content += "Distance:         " + getDistanceMeterByPath(path) + " meters\n";
+    content += "Distance:         " + getDistanceMeterByPath(path, start, end) + " meters\n";
     content += "\nClick OK to see changes!"
   }
   alert(content);
 }
 
-async function processPrevWithModeAndId(prev, mode, endId, timeDelay, nodeList = NodeList) {
+async function processPrevWithModeAndId(prev, mode, startNode, endNode, timeDelay, nodeList = NodeList) {
   if (StopLoop) return;
   if (mode == true) {
     await DELAY(timeDelay * 100);
     refreshSegemnt();
   }
 
+  var startTmp = getNearestNode(startNode);
+  var endTmp = getNearestNode(endNode);
+  drawSegment(startNode, startTmp);
+
   var path = [];
-  var u = getIndexByNodeId(endId);
+  var u = getIndexByNodeId(endNode.id);
   while (u != -1) {
     path.push(nodeList[u]);
     u = prev[u];
@@ -373,7 +387,9 @@ async function processPrevWithModeAndId(prev, mode, endId, timeDelay, nodeList =
     drawSegment(path[i - 1], path[i]);
   }
 
-  showAlert(path);
+  drawSegment(endTmp, endNode);
+
+  showAlert(path, startNode, endNode);
 }
 
 // ------------------------------------------------------------------------ //
@@ -423,6 +439,16 @@ function getDataEdges(xmlDoc) {
 
   var ways = xmlDoc.getElementsByTagName("way");
   for (let i = 0; i < ways.length; i++) {
+    var tags = ways[i].getElementsByTagName("tag");
+    var isHighway = false;
+    for (let j = 0; j < tags.length; j++) {
+      if (tags[j].getAttribute("k") == "highway" && tags[j].getAttribute("v") != "footway") {
+        isHighway = true;
+        break;
+      }
+    }
+    if (!isHighway) continue;
+
     var nodes_in_way = ways[i].getElementsByTagName("nd");
     for (let j = 1; j < nodes_in_way.length; j++) {
       var id0 = nodes_in_way[j - 1].attributes[0].nodeValue;
@@ -436,6 +462,14 @@ function getDataEdges(xmlDoc) {
   }
 
   return edgeList;
+}
+
+function visibleNodeListOnWay(nodeList, edgeList) {
+  for (let i = 0; i < edgeList.length; i++) {
+    if (edgeList[i].length == 0) nodeList[i].visible = false;
+  }
+  
+  return nodeList;
 }
 
 // ------------------------------------------------------------------------ //
@@ -484,7 +518,7 @@ async function drawPath_Dijkstra(
     }
   }
 
-  processPrevWithModeAndId(prev, mode, end.id, timeDelay);
+  processPrevWithModeAndId(prev, mode, start, end, timeDelay);
 }
 
 // ------------------------------------------------------------------------ //
@@ -533,7 +567,7 @@ async function drawPath_BFS(
     }
   }
 
-  processPrevWithModeAndId(prev, mode, end.id, timeDelay);
+  processPrevWithModeAndId(prev, mode, start, end, timeDelay);
 }
 
 // ------------------------------------------------------------------------ //
@@ -582,7 +616,7 @@ async function drawPath_DFS(
     }
   }
 
-  processPrevWithModeAndId(prev, mode, end.id, timeDelay);
+  processPrevWithModeAndId(prev, mode, start, end, timeDelay);
 }
 
 // ------------------------------------------------------------------------ //
@@ -630,13 +664,18 @@ async function drawPath_ASearch(
     }
   }
 
-  processPrevWithModeAndId(prev, mode, end.id, timeDelay);
+  processPrevWithModeAndId(prev, mode, start, end, timeDelay);
 }
 
 // ------------------------------------------------------------------------ //
 // ---------------       Choose an algorithm to route     ----------------- //
 // ------------------------------------------------------------------------ //
 async function drawPath(option = 0) {
+  // Processing StartNode and EndNode
+  var startTmp = getNearestNode(StartNode);
+  var endTmp = getNearestNode(EndNode);
+  if (ModeVisualize == false) drawSegment(StartNode, startTmp);
+
   // option:
   //   0: Dijkstra (Default)
   //   1: BFS
@@ -644,25 +683,27 @@ async function drawPath(option = 0) {
   //   3: A*
   if (option == 0) {
     await drawPath_Dijkstra(
-      StartNode,
-      EndNode,
+      startTmp,
+      endTmp,
       NodeList,
       EdgeList,
       ModeVisualize
     );
   } else if (option == 1) {
-    await drawPath_BFS(StartNode, EndNode, NodeList, EdgeList, ModeVisualize);
+    await drawPath_BFS(startTmp, endTmp, NodeList, EdgeList, ModeVisualize);
   } else if (option == 2) {
-    await drawPath_DFS(StartNode, EndNode, NodeList, EdgeList, ModeVisualize);
+    await drawPath_DFS(startTmp, endTmp, NodeList, EdgeList, ModeVisualize);
   } else if (option == 3) {
     await drawPath_ASearch(
-      StartNode,
-      EndNode,
+      startTmp,
+      endTmp,
       NodeList,
       EdgeList,
       ModeVisualize
     );
   }
+  
+  if (ModeVisualize == false) drawSegment(endTmp, EndNode);
 }
 
 // ------------------------------------------------------------------------ //
@@ -760,7 +801,6 @@ map.on("click", async function (e) {
     StopLoop = false;
     StartNode.lat = e.latlng.lat;
     StartNode.lon = e.latlng.lng;
-    StartNode = getNearestNode(StartNode);
 
     L.marker([StartNode.lat, StartNode.lon])
       .bindPopup("From")
@@ -769,7 +809,6 @@ map.on("click", async function (e) {
   } else if (EndNode.lat == -1) {
     EndNode.lat = e.latlng.lat;
     EndNode.lon = e.latlng.lng;
-    EndNode = getNearestNode(EndNode);
 
     L.marker([EndNode.lat, EndNode.lon]).bindPopup("To").openPopup().addTo(map);
 
@@ -785,4 +824,5 @@ document.addEventListener("DOMContentLoaded", function () {
   var xmlData = getDataXml("map.xml");
   NodeList = getDataNodes(xmlData);
   EdgeList = getDataEdges(xmlData);
+  NodeList = visibleNodeListOnWay(NodeList, EdgeList);
 });
